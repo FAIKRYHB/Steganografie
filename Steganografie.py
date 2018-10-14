@@ -1,4 +1,5 @@
 import sys
+import math
 
 from PyQt5.QtWidgets import QApplication, QMainWindow, QStatusBar, QFileDialog
 from PyQt5 import QtGui, uic
@@ -22,6 +23,10 @@ class Steganografie(QMainWindow, Ui_MainWindow):
                                                   "PNG files (*.png);;BMP Files (*.bmp)", options=options)
         if fileName:
             self.image = fileName
+            obrazek = Image.open(self.image)
+            total = math.floor((obrazek.width * obrazek.height - 1) / 8)
+
+            self.info.setText("max: " + str(total) + " znaků")
 
             self.beforePicture.setPixmap(QtGui.QPixmap(self.image).scaled(171, 140))
     def loadMessage(self):
@@ -80,7 +85,10 @@ class Steganografie(QMainWindow, Ui_MainWindow):
                     break
        obrazek.save(target)
        obrazek.close()
+
        self.dest = target
+
+
        self.afterPicture.setPixmap(QtGui.QPixmap(self.dest).scaled(171, 151))
 
     def saveFile(self):
